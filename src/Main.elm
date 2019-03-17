@@ -5,6 +5,10 @@ import Svg exposing (..)
 import Svg.Attributes exposing (..)
 
 
+type alias Model =
+    Ball
+
+
 type alias Ball =
     { x : Int
     , y : Int
@@ -17,25 +21,25 @@ ball =
     }
 
 
-main : Program () () ()
+main : Program () Model ()
 main =
     Browser.element
-        { init = \_ -> ( (), Cmd.none )
-        , view = \_ -> view ball
-        , update = \_ _ -> ( (), Cmd.none )
+        { init = \_ -> ( ball, Cmd.none )
+        , view = view
+        , update = \_ model -> ( model, Cmd.none )
         , subscriptions = \_ -> Sub.none
         }
 
 
-view : Ball -> Svg.Svg ()
-view ball_ =
+view : Model -> Svg.Svg ()
+view model =
     svg
         [ width "500"
         , height "500"
         , viewBox "0 0 500 500"
         , Svg.Attributes.style "background: #efefef"
         ]
-        [ viewBall ball_
+        [ viewBall model
         ]
 
 
