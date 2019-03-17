@@ -4,6 +4,18 @@ import Svg exposing (..)
 import Svg.Attributes exposing (..)
 
 
+type alias Ball =
+    { x : Int
+    , y : Int
+    }
+
+
+ball =
+    { x = 250
+    , y = 250
+    }
+
+
 main =
     svg
         [ width "500"
@@ -11,12 +23,12 @@ main =
         , viewBox "0 0 500 500"
         , Svg.Attributes.style "background: #efefef"
         ]
-        [ viewBall 250 250
+        [ viewBall ball
         ]
 
 
-viewBall : Int -> Int -> Svg.Svg msg
-viewBall x y =
+viewBall : Ball -> Svg.Svg msg
+viewBall { x, y } =
     circle
         [ cx <| String.fromInt x
         , cy <| String.fromInt y
