@@ -1,5 +1,6 @@
 module Main exposing (main)
 
+import Browser
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
 
@@ -16,8 +17,14 @@ ball =
     }
 
 
+main : Program () () ()
 main =
-    view ball
+    Browser.element
+        { init = \_ -> ( (), Cmd.none )
+        , view = \_ -> view ball
+        , update = \_ _ -> ( (), Cmd.none )
+        , subscriptions = \_ -> Sub.none
+        }
 
 
 view : Ball -> Svg.Svg ()
