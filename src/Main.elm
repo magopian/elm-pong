@@ -19,7 +19,7 @@ type Msg
     = OnAnimationFrame Float
 
 
-init : () -> ( Model, Cmd () )
+init : () -> ( Model, Cmd Msg )
 init _ =
     ( { x = 250
       , y = 250
@@ -28,7 +28,7 @@ init _ =
     )
 
 
-main : Program () Model ()
+main : Program () Model Msg
 main =
     Browser.element
         { init = init
@@ -38,7 +38,7 @@ main =
         }
 
 
-view : Model -> Svg.Svg ()
+view : Model -> Svg.Svg Msg
 view model =
     svg
         [ width "500"
@@ -50,7 +50,7 @@ view model =
         ]
 
 
-viewBall : Ball -> Svg.Svg msg
+viewBall : Ball -> Svg.Svg Msg
 viewBall { x, y } =
     circle
         [ cx <| String.fromInt x
