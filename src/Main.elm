@@ -15,6 +15,10 @@ type alias Ball =
     }
 
 
+type Msg
+    = OnAnimationFrame Float
+
+
 init : () -> ( Model, Cmd () )
 init _ =
     ( { x = 250
