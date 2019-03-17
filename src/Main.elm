@@ -15,16 +15,19 @@ type alias Ball =
     }
 
 
-ball =
-    { x = 250
-    , y = 250
-    }
+init : () -> ( Model, Cmd () )
+init _ =
+    ( { x = 250
+      , y = 250
+      }
+    , Cmd.none
+    )
 
 
 main : Program () Model ()
 main =
     Browser.element
-        { init = \_ -> ( ball, Cmd.none )
+        { init = init
         , view = view
         , update = \_ model -> ( model, Cmd.none )
         , subscriptions = \_ -> Sub.none
