@@ -1,6 +1,7 @@
 module Main exposing (main)
 
 import Browser
+import Browser.Events
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
 
@@ -34,7 +35,7 @@ main =
         { init = init
         , view = view
         , update = \_ model -> ( model, Cmd.none )
-        , subscriptions = \_ -> Sub.none
+        , subscriptions = subscriptions
         }
 
 
@@ -58,3 +59,8 @@ viewBall { x, y } =
         , r "10"
         ]
         []
+
+
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+    Browser.Events.onAnimationFrameDelta OnAnimationFrame
