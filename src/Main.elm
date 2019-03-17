@@ -11,10 +11,15 @@ main =
         , viewBox "0 0 500 500"
         , Svg.Attributes.style "background: #efefef"
         ]
-        [ circle
-            [ cx "250"
-            , cy "250"
-            , r "10"
-            ]
-            []
+        [ viewBall
         ]
+
+
+viewBall : Svg msg
+viewBall =
+    circle
+        [ cx "250"
+        , cy "250"
+        , r "10"
+        ]
+        []
