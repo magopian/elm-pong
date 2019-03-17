@@ -17,13 +17,18 @@ ball =
 
 
 main =
+    view ball
+
+
+view : Ball -> Svg.Svg ()
+view ball_ =
     svg
         [ width "500"
         , height "500"
         , viewBox "0 0 500 500"
         , Svg.Attributes.style "background: #efefef"
         ]
-        [ viewBall ball
+        [ viewBall ball_
         ]
 
 
