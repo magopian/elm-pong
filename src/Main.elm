@@ -11,15 +11,15 @@ main =
         , viewBox "0 0 500 500"
         , Svg.Attributes.style "background: #efefef"
         ]
-        [ viewBall
+        [ viewBall 250 250
         ]
 
 
-viewBall : Svg msg
-viewBall =
+viewBall : Int -> Int -> Svg.Svg msg
+viewBall x y =
     circle
-        [ cx "250"
-        , cy "250"
+        [ cx <| String.fromInt x
+        , cy <| String.fromInt y
         , r "10"
         ]
         []
