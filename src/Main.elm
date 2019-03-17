@@ -20,7 +20,11 @@ type Msg
     = OnAnimationFrame Float
 
 
-init : () -> ( Model, Cmd Msg )
+type alias Flags =
+    ()
+
+
+init : Flags -> ( Model, Cmd Msg )
 init _ =
     ( { x = 250
       , y = 250
@@ -29,14 +33,19 @@ init _ =
     )
 
 
-main : Program () Model Msg
+main : Program Flags Model Msg
 main =
     Browser.element
         { init = init
         , view = view
-        , update = \_ model -> ( model, Cmd.none )
+        , update = update
         , subscriptions = subscriptions
         }
+
+
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
+    ( model, Cmd.none )
 
 
 view : Model -> Svg.Svg Msg
