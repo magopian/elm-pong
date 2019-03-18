@@ -45,7 +45,9 @@ main =
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    ( model, Cmd.none )
+    case msg of
+        OnAnimationFrame timeDelta ->
+            ( { model | x = model.x + 4 }, Cmd.none )
 
 
 view : Model -> Svg.Svg Msg
