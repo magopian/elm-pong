@@ -7,7 +7,8 @@ import Svg.Attributes exposing (..)
 
 
 type alias Model =
-    Ball
+    { ball : Ball
+    }
 
 
 type alias Ball =
@@ -28,13 +29,20 @@ type alias Flags =
 
 init : Flags -> ( Model, Cmd Msg )
 init _ =
-    ( { x = 250
-      , y = 250
-      , radius = 10
-      , horizSpeed = 4
+    ( { ball =
+            initBall
       }
     , Cmd.none
     )
+
+
+initBall : Ball
+initBall =
+    { x = 250
+    , y = 250
+    , radius = 10
+    , horizSpeed = 4
+    }
 
 
 main : Program Flags Model Msg
@@ -51,18 +59,25 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         OnAnimationFrame timeDelta ->
-            ( { model | x = model.x + model.horizSpeed }, Cmd.none )
+            let
+                ball =
+                    model.ball
+
+                updatedBall =
+                    { ball | x = ball.x + ball.horizSpeed }
+            in
+            ( { model | ball = updatedBall }, Cmd.none )
 
 
 view : Model -> Svg.Svg Msg
-view model =
+view { ball } =
     svg
         [ width "500"
         , height "500"
         , viewBox "0 0 500 500"
         , Svg.Attributes.style "background: #efefef"
         ]
-        [ viewBall model
+        [ viewBall ball
         , rect
             [ x "480"
             , y "225"
