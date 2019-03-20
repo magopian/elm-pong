@@ -13,6 +13,7 @@ type alias Model =
 type alias Ball =
     { x : Int
     , y : Int
+    , horizSpeed : Int
     }
 
 
@@ -28,6 +29,7 @@ init : Flags -> ( Model, Cmd Msg )
 init _ =
     ( { x = 250
       , y = 250
+      , horizSpeed = 4
       }
     , Cmd.none
     )
@@ -47,7 +49,7 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         OnAnimationFrame timeDelta ->
-            ( { model | x = model.x + 4 }, Cmd.none )
+            ( { model | x = model.x + model.horizSpeed }, Cmd.none )
 
 
 view : Model -> Svg.Svg Msg
