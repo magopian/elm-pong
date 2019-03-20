@@ -59,6 +59,13 @@ view model =
         , Svg.Attributes.style "background: #efefef"
         ]
         [ viewBall model
+        , rect
+            [ x "480"
+            , y "225"
+            , width "10"
+            , height "50"
+            ]
+            []
         ]
 
 
