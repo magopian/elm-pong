@@ -13,6 +13,7 @@ type alias Model =
 type alias Ball =
     { x : Int
     , y : Int
+    , radius : Int
     , horizSpeed : Int
     }
 
@@ -29,6 +30,7 @@ init : Flags -> ( Model, Cmd Msg )
 init _ =
     ( { x = 250
       , y = 250
+      , radius = 10
       , horizSpeed = 4
       }
     , Cmd.none
@@ -72,11 +74,11 @@ view model =
 
 
 viewBall : Ball -> Svg.Svg Msg
-viewBall { x, y } =
+viewBall { x, y, radius } =
     circle
         [ cx <| String.fromInt x
         , cy <| String.fromInt y
-        , r "10"
+        , r <| String.fromInt radius
         ]
         []
 
