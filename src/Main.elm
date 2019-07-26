@@ -82,10 +82,21 @@ update msg model =
                 ball =
                     model.ball
 
+                shouldBounce =
+                    shouldBallBounce model.paddle model.ball
+                        |> Debug.log "shouldBounce"
+
                 updatedBall =
                     { ball | x = ball.x + ball.horizSpeed }
             in
             ( { model | ball = updatedBall }, Cmd.none )
+
+
+shouldBallBounce : Paddle -> Ball -> Bool
+shouldBallBounce paddle ball =
+    (ball.x + ball.radius >= paddle.x)
+        && (ball.y >= paddle.y - 50 // 2)
+        && (ball.y <= paddle.y + 50 // 2)
 
 
 view : Model -> Svg.Svg Msg
