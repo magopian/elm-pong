@@ -49,7 +49,7 @@ init _ =
 initBall : Ball
 initBall =
     { x = 250
-    , y = 250
+    , y = 260
     , radius = 10
     , horizSpeed = 4
     }
