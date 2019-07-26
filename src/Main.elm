@@ -84,10 +84,19 @@ update msg model =
 
                 shouldBounce =
                     shouldBallBounce model.paddle model.ball
-                        |> Debug.log "shouldBounce"
+
+                horizSpeed =
+                    if shouldBounce then
+                        ball.horizSpeed * -1
+
+                    else
+                        ball.horizSpeed
 
                 updatedBall =
-                    { ball | x = ball.x + ball.horizSpeed }
+                    { ball
+                        | x = ball.x + horizSpeed
+                        , horizSpeed = horizSpeed
+                    }
             in
             ( { model | ball = updatedBall }, Cmd.none )
 
