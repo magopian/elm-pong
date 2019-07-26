@@ -8,6 +8,7 @@ import Svg.Attributes exposing (..)
 
 type alias Model =
     { ball : Ball
+    , paddle : Paddle
     }
 
 
@@ -16,6 +17,14 @@ type alias Ball =
     , y : Int
     , radius : Int
     , horizSpeed : Int
+    }
+
+
+type alias Paddle =
+    { x : Int
+    , y : Int
+    , width : Int
+    , height : Int
     }
 
 
@@ -31,6 +40,7 @@ init : Flags -> ( Model, Cmd Msg )
 init _ =
     ( { ball =
             initBall
+      , paddle = initPaddle
       }
     , Cmd.none
     )
@@ -42,6 +52,15 @@ initBall =
     , y = 250
     , radius = 10
     , horizSpeed = 4
+    }
+
+
+initPaddle : Paddle
+initPaddle =
+    { x = 480
+    , y = 225
+    , width = 10
+    , height = 50
     }
 
 
@@ -70,7 +89,7 @@ update msg model =
 
 
 view : Model -> Svg.Svg Msg
-view { ball } =
+view { ball, paddle } =
     svg
         [ width "500"
         , height "500"
@@ -78,13 +97,7 @@ view { ball } =
         , Svg.Attributes.style "background: #efefef"
         ]
         [ viewBall ball
-        , rect
-            [ x "480"
-            , y "225"
-            , width "10"
-            , height "50"
-            ]
-            []
+        , viewPaddle paddle
         ]
 
 
@@ -94,6 +107,17 @@ viewBall { x, y, radius } =
         [ cx <| String.fromInt x
         , cy <| String.fromInt y
         , r <| String.fromInt radius
+        ]
+        []
+
+
+viewPaddle : Paddle -> Svg.Svg Msg
+viewPaddle paddle =
+    rect
+        [ x <| String.fromInt paddle.x
+        , y <| String.fromInt paddle.y
+        , width <| String.fromInt paddle.width
+        , height <| String.fromInt paddle.height
         ]
         []
 
