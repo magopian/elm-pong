@@ -49,7 +49,7 @@ init _ =
 initBall : Ball
 initBall =
     { x = 250
-    , y = 260
+    , y = 250
     , radius = 10
     , horizSpeed = 4
     }
@@ -104,8 +104,8 @@ update msg model =
 shouldBallBounce : Paddle -> Ball -> Bool
 shouldBallBounce paddle ball =
     (ball.x + ball.radius >= paddle.x)
-        && (ball.y >= paddle.y - 50 // 2)
-        && (ball.y <= paddle.y + 50 // 2)
+        && (ball.y >= paddle.y)
+        && (ball.y <= paddle.y + 50)
 
 
 view : Model -> Svg.Svg Msg
