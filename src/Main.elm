@@ -40,8 +40,8 @@ type alias Flags =
 init : Flags -> ( Model, Cmd Msg )
 init _ =
     ( { ball = initBall
-      , rightPaddle = initPaddle
-      , leftPaddle = initPaddle
+      , rightPaddle = initPaddle 480
+      , leftPaddle = initPaddle 10
       }
     , Cmd.none
     )
@@ -56,9 +56,9 @@ initBall =
     }
 
 
-initPaddle : Paddle
-initPaddle =
-    { x = 480
+initPaddle : Int -> Paddle
+initPaddle initialX =
+    { x = initialX
     , y = 225
     , width = 10
     , height = 50
