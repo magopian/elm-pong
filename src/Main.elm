@@ -8,7 +8,7 @@ import Svg.Attributes exposing (..)
 
 type alias Model =
     { ball : Ball
-    , paddle : Paddle
+    , rightPaddle : Paddle
     }
 
 
@@ -38,9 +38,8 @@ type alias Flags =
 
 init : Flags -> ( Model, Cmd Msg )
 init _ =
-    ( { ball =
-            initBall
-      , paddle = initPaddle
+    ( { ball = initBall
+      , rightPaddle = initPaddle
       }
     , Cmd.none
     )
@@ -83,7 +82,7 @@ update msg model =
                     model.ball
 
                 shouldBounce =
-                    shouldBallBounce model.paddle model.ball
+                    shouldBallBounce model.rightPaddle model.ball
 
                 horizSpeed =
                     if shouldBounce then
@@ -109,7 +108,7 @@ shouldBallBounce paddle ball =
 
 
 view : Model -> Svg.Svg Msg
-view { ball, paddle } =
+view { ball, rightPaddle } =
     svg
         [ width "500"
         , height "500"
@@ -117,7 +116,7 @@ view { ball, paddle } =
         , Svg.Attributes.style "background: #efefef"
         ]
         [ viewBall ball
-        , viewPaddle paddle
+        , viewPaddle rightPaddle
         ]
 
 
