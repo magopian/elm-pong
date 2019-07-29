@@ -9,6 +9,7 @@ import Svg.Attributes exposing (..)
 type alias Model =
     { ball : Ball
     , rightPaddle : Paddle
+    , leftPaddle : Paddle
     }
 
 
@@ -40,6 +41,7 @@ init : Flags -> ( Model, Cmd Msg )
 init _ =
     ( { ball = initBall
       , rightPaddle = initPaddle
+      , leftPaddle = initPaddle
       }
     , Cmd.none
     )
@@ -108,7 +110,7 @@ shouldBallBounce paddle ball =
 
 
 view : Model -> Svg.Svg Msg
-view { ball, rightPaddle } =
+view { ball, rightPaddle, leftPaddle } =
     svg
         [ width "500"
         , height "500"
@@ -117,6 +119,7 @@ view { ball, rightPaddle } =
         ]
         [ viewBall ball
         , viewPaddle rightPaddle
+        , viewPaddle leftPaddle
         ]
 
 
