@@ -21,7 +21,12 @@ type alias Ball =
     }
 
 
-type alias Paddle =
+type Paddle
+    = RightPaddle PaddleInfo
+    | LeftPaddle PaddleInfo
+
+
+type alias PaddleInfo =
     { x : Int
     , y : Int
     , width : Int
@@ -40,8 +45,8 @@ type alias Flags =
 init : Flags -> ( Model, Cmd Msg )
 init _ =
     ( { ball = initBall
-      , rightPaddle = initPaddle 480
-      , leftPaddle = initPaddle 10
+      , rightPaddle = RightPaddle <| initPaddle 480
+      , leftPaddle = LeftPaddle <| initPaddle 10
       }
     , Cmd.none
     )
@@ -56,7 +61,7 @@ initBall =
     }
 
 
-initPaddle : Int -> Paddle
+initPaddle : Int -> PaddleInfo
 initPaddle initialX =
     { x = initialX
     , y = 225
@@ -105,17 +110,16 @@ update msg model =
 
 shouldBallBounce : Paddle -> Ball -> Bool
 shouldBallBounce paddle ball =
-    if paddle.x == 10 then
-        -- left paddle
-        (ball.x - ball.radius <= paddle.x + paddle.width)
-            && (ball.y >= paddle.y)
-            && (ball.y <= paddle.y + 50)
+    case paddle of
+        LeftPaddle { x, y, width, height } ->
+            (ball.x - ball.radius <= x + width)
+                && (ball.y >= y)
+                && (ball.y <= y + height)
 
-    else
-        -- right paddle
-        (ball.x + ball.radius >= paddle.x)
-            && (ball.y >= paddle.y)
-            && (ball.y <= paddle.y + 50)
+        RightPaddle { x, y, height } ->
+            (ball.x + ball.radius >= x)
+                && (ball.y >= y)
+                && (ball.y <= y + height)
 
 
 view : Model -> Svg.Svg Msg
@@ -144,11 +148,20 @@ viewBall { x, y, radius } =
 
 viewPaddle : Paddle -> Svg.Svg Msg
 viewPaddle paddle =
+    let
+        paddleInfo =
+            case paddle of
+                LeftPaddle info ->
+                    info
+
+                RightPaddle info ->
+                    info
+    in
     rect
-        [ x <| String.fromInt paddle.x
-        , y <| String.fromInt paddle.y
-        , width <| String.fromInt paddle.width
-        , height <| String.fromInt paddle.height
+        [ x <| String.fromInt paddleInfo.x
+        , y <| String.fromInt paddleInfo.y
+        , width <| String.fromInt paddleInfo.width
+        , height <| String.fromInt paddleInfo.height
         ]
         []
 
