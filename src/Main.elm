@@ -85,6 +85,7 @@ update msg model =
 
                 shouldBounce =
                     shouldBallBounce model.rightPaddle model.ball
+                        || shouldBallBounce model.leftPaddle model.ball
 
                 horizSpeed =
                     if shouldBounce then
@@ -104,9 +105,17 @@ update msg model =
 
 shouldBallBounce : Paddle -> Ball -> Bool
 shouldBallBounce paddle ball =
-    (ball.x + ball.radius >= paddle.x)
-        && (ball.y >= paddle.y)
-        && (ball.y <= paddle.y + 50)
+    if paddle.x == 10 then
+        -- left paddle
+        (ball.x - ball.radius <= paddle.x + paddle.width)
+            && (ball.y >= paddle.y)
+            && (ball.y <= paddle.y + 50)
+
+    else
+        -- right paddle
+        (ball.x + ball.radius >= paddle.x)
+            && (ball.y >= paddle.y)
+            && (ball.y <= paddle.y + 50)
 
 
 view : Model -> Svg.Svg Msg
