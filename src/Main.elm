@@ -2,6 +2,7 @@ module Main exposing (main)
 
 import Browser
 import Browser.Events
+import Json.Decode as Decode
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
 
@@ -36,6 +37,7 @@ type alias PaddleInfo =
 
 type Msg
     = OnAnimationFrame Float
+    | KeyDown String
 
 
 type alias Flags =
@@ -107,6 +109,13 @@ update msg model =
             in
             ( { model | ball = updatedBall }, Cmd.none )
 
+        KeyDown keyString ->
+            let
+                _ =
+                    Debug.log "key pressed" keyString
+            in
+            ( model, Cmd.none )
+
 
 shouldBallBounce : Paddle -> Ball -> Bool
 shouldBallBounce paddle ball =
@@ -168,4 +177,12 @@ viewPaddle paddle =
 
 subscriptions : Model -> Sub Msg
 subscriptions _ =
-    Browser.Events.onAnimationFrameDelta OnAnimationFrame
+    Sub.batch
+        [ Browser.Events.onAnimationFrameDelta OnAnimationFrame
+        , Browser.Events.onKeyDown (Decode.map KeyDown keyDecoder)
+        ]
+
+
+keyDecoder : Decode.Decoder String
+keyDecoder =
+    Decode.field "key" Decode.string
