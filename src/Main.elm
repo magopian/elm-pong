@@ -43,6 +43,8 @@ type Msg
 type PlayerAction
     = RightPaddleUp
     | RightPaddleDown
+    | LeftPaddleUp
+    | LeftPaddleDown
 
 
 type alias Flags =
@@ -123,6 +125,16 @@ update msg model =
 
                 RightPaddleDown ->
                     ( { model | rightPaddle = model.rightPaddle |> updatePaddle 10 }
+                    , Cmd.none
+                    )
+
+                LeftPaddleUp ->
+                    ( { model | leftPaddle = model.leftPaddle |> updatePaddle -10 }
+                    , Cmd.none
+                    )
+
+                LeftPaddleDown ->
+                    ( { model | leftPaddle = model.leftPaddle |> updatePaddle 10 }
                     , Cmd.none
                     )
 
@@ -219,6 +231,12 @@ keyToPlayerAction keyString =
 
         "ArrowDown" ->
             Decode.succeed RightPaddleDown
+
+        "e" ->
+            Decode.succeed LeftPaddleUp
+
+        "d" ->
+            Decode.succeed LeftPaddleDown
 
         _ ->
             Decode.fail "not an event we care about"
