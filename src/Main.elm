@@ -114,12 +114,29 @@ update msg model =
             in
             ( { model | ball = updatedBall }, Cmd.none )
 
-        KeyDown keyString ->
-            let
-                _ =
-                    Debug.log "key pressed" keyString
-            in
-            ( model, Cmd.none )
+        KeyDown playerAction ->
+            case playerAction of
+                RightPaddleUp ->
+                    ( { model | rightPaddle = model.rightPaddle |> updatePaddle -10 }
+                    , Cmd.none
+                    )
+
+                RightPaddleDown ->
+                    ( { model | rightPaddle = model.rightPaddle |> updatePaddle 10 }
+                    , Cmd.none
+                    )
+
+
+updatePaddle : Int -> Paddle -> Paddle
+updatePaddle amount paddle =
+    case paddle of
+        RightPaddle paddleInfo ->
+            { paddleInfo | y = paddleInfo.y + amount }
+                |> RightPaddle
+
+        LeftPaddle paddleInfo ->
+            { paddleInfo | y = paddleInfo.y + amount }
+                |> LeftPaddle
 
 
 shouldBallBounce : Paddle -> Ball -> Bool
