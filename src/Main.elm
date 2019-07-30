@@ -37,7 +37,12 @@ type alias PaddleInfo =
 
 type Msg
     = OnAnimationFrame Float
-    | KeyDown String
+    | KeyDown PlayerAction
+
+
+type PlayerAction
+    = RightPaddleUp
+    | RightPaddleDown
 
 
 type alias Flags =
@@ -183,6 +188,20 @@ subscriptions _ =
         ]
 
 
-keyDecoder : Decode.Decoder String
+keyDecoder : Decode.Decoder PlayerAction
 keyDecoder =
     Decode.field "key" Decode.string
+        |> Decode.andThen keyToPlayerAction
+
+
+keyToPlayerAction : String -> Decode.Decoder PlayerAction
+keyToPlayerAction keyString =
+    case keyString of
+        "ArrowUp" ->
+            Decode.succeed RightPaddleUp
+
+        "ArrowDown" ->
+            Decode.succeed RightPaddleDown
+
+        _ ->
+            Decode.fail "not an event we care about"
