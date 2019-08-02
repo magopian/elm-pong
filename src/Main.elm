@@ -123,8 +123,20 @@ update msg model =
                         | x = ball.x + horizSpeed
                         , horizSpeed = horizSpeed
                     }
+
+                updatedRightPaddle =
+                    updatePaddle model.rightPaddleMovement model.rightPaddle
+
+                updatedLeftPaddle =
+                    updatePaddle model.leftPaddleMovement model.leftPaddle
             in
-            ( { model | ball = updatedBall }, Cmd.none )
+            ( { model
+                | ball = updatedBall
+                , rightPaddle = updatedRightPaddle
+                , leftPaddle = updatedLeftPaddle
+              }
+            , Cmd.none
+            )
 
         KeyDown playerAction ->
             case playerAction of
@@ -149,8 +161,20 @@ update msg model =
                     )
 
 
-updatePaddle : Int -> Paddle -> Paddle
-updatePaddle amount paddle =
+updatePaddle : PaddleMovement -> Paddle -> Paddle
+updatePaddle movement paddle =
+    let
+        amount =
+            case movement of
+                MovingUp ->
+                    -10
+
+                MovingDown ->
+                    10
+
+                NotMoving ->
+                    0
+    in
     case paddle of
         RightPaddle paddleInfo ->
             { paddleInfo | y = paddleInfo.y + amount }
