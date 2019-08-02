@@ -129,22 +129,22 @@ update msg model =
         KeyDown playerAction ->
             case playerAction of
                 RightPaddleUp ->
-                    ( { model | rightPaddle = model.rightPaddle |> updatePaddle -10 }
+                    ( { model | rightPaddleMovement = MovingUp }
                     , Cmd.none
                     )
 
                 RightPaddleDown ->
-                    ( { model | rightPaddle = model.rightPaddle |> updatePaddle 10 }
+                    ( { model | rightPaddleMovement = MovingDown }
                     , Cmd.none
                     )
 
                 LeftPaddleUp ->
-                    ( { model | leftPaddle = model.leftPaddle |> updatePaddle -10 }
+                    ( { model | leftPaddleMovement = MovingUp }
                     , Cmd.none
                     )
 
                 LeftPaddleDown ->
-                    ( { model | leftPaddle = model.leftPaddle |> updatePaddle 10 }
+                    ( { model | leftPaddleMovement = MovingDown }
                     , Cmd.none
                     )
 
