@@ -21,6 +21,7 @@ type alias Ball =
     , y : Int
     , radius : Int
     , horizSpeed : Int
+    , vertSpeed : Int
     }
 
 
@@ -78,6 +79,7 @@ initBall =
     , y = 250
     , radius = 10
     , horizSpeed = 4
+    , vertSpeed = 2
     }
 
 
@@ -122,6 +124,7 @@ update msg model =
                 updatedBall =
                     { ball
                         | x = ball.x + horizSpeed
+                        , y = ball.y + ball.vertSpeed
                         , horizSpeed = horizSpeed
                     }
 
