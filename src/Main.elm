@@ -46,6 +46,7 @@ type PaddleMovement
 type Msg
     = OnAnimationFrame Float
     | KeyDown PlayerAction
+    | KeyUp PlayerAction
 
 
 type PlayerAction
@@ -160,6 +161,28 @@ update msg model =
                     , Cmd.none
                     )
 
+        KeyUp playerAction ->
+            case playerAction of
+                RightPaddleUp ->
+                    ( { model | rightPaddleMovement = NotMoving }
+                    , Cmd.none
+                    )
+
+                RightPaddleDown ->
+                    ( { model | rightPaddleMovement = NotMoving }
+                    , Cmd.none
+                    )
+
+                LeftPaddleUp ->
+                    ( { model | leftPaddleMovement = NotMoving }
+                    , Cmd.none
+                    )
+
+                LeftPaddleDown ->
+                    ( { model | leftPaddleMovement = NotMoving }
+                    , Cmd.none
+                    )
+
 
 updatePaddle : PaddleMovement -> Paddle -> Paddle
 updatePaddle movement paddle =
@@ -248,6 +271,7 @@ subscriptions _ =
     Sub.batch
         [ Browser.Events.onAnimationFrameDelta OnAnimationFrame
         , Browser.Events.onKeyDown (Decode.map KeyDown keyDecoder)
+        , Browser.Events.onKeyUp (Decode.map KeyUp keyDecoder)
         ]
 
 
