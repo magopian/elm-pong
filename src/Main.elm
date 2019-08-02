@@ -11,6 +11,8 @@ type alias Model =
     { ball : Ball
     , rightPaddle : Paddle
     , leftPaddle : Paddle
+    , rightPaddleMovement : PaddleMovement
+    , leftPaddleMovement : PaddleMovement
     }
 
 
@@ -35,6 +37,12 @@ type alias PaddleInfo =
     }
 
 
+type PaddleMovement
+    = MovingUp
+    | MovingDown
+    | NotMoving
+
+
 type Msg
     = OnAnimationFrame Float
     | KeyDown PlayerAction
@@ -56,6 +64,8 @@ init _ =
     ( { ball = initBall
       , rightPaddle = RightPaddle <| initPaddle 480
       , leftPaddle = LeftPaddle <| initPaddle 10
+      , rightPaddleMovement = NotMoving
+      , leftPaddleMovement = NotMoving
       }
     , Cmd.none
     )
