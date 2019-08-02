@@ -121,11 +121,22 @@ update msg model =
                     else
                         ball.horizSpeed
 
+                shouldBounceVertically =
+                    shouldBallBounceVertically model.ball
+
+                vertSpeed =
+                    if shouldBounceVertically then
+                        ball.vertSpeed * -1
+
+                    else
+                        ball.vertSpeed
+
                 updatedBall =
                     { ball
                         | x = ball.x + horizSpeed
-                        , y = ball.y + ball.vertSpeed
+                        , y = ball.y + vertSpeed
                         , horizSpeed = horizSpeed
+                        , vertSpeed = vertSpeed
                     }
 
                 updatedRightPaddle =
@@ -231,6 +242,15 @@ shouldBallBounce paddle ball =
             (ball.x + ball.radius >= x)
                 && (ball.y >= y)
                 && (ball.y <= y + height)
+
+
+shouldBallBounceVertically : Ball -> Bool
+shouldBallBounceVertically ball =
+    let
+        radius =
+            ball.radius
+    in
+    ball.y <= radius || ball.y >= (500 - radius)
 
 
 view : Model -> Svg.Svg Msg
