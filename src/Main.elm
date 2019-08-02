@@ -200,11 +200,19 @@ updatePaddle movement paddle =
     in
     case paddle of
         RightPaddle paddleInfo ->
-            { paddleInfo | y = paddleInfo.y + amount }
+            { paddleInfo
+                | y =
+                    (paddleInfo.y + amount)
+                        |> clamp 0 (500 - paddleInfo.height)
+            }
                 |> RightPaddle
 
         LeftPaddle paddleInfo ->
-            { paddleInfo | y = paddleInfo.y + amount }
+            { paddleInfo
+                | y =
+                    (paddleInfo.y + amount)
+                        |> clamp 0 (500 - paddleInfo.height)
+            }
                 |> LeftPaddle
 
 
