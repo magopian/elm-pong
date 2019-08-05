@@ -3,8 +3,10 @@ module Main exposing (main)
 import Browser
 import Browser.Events
 import Json.Decode as Decode
+import Process
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
+import Task
 
 
 type alias Model =
@@ -59,6 +61,7 @@ type Msg
     = OnAnimationFrame Float
     | KeyDown PlayerAction
     | KeyUp PlayerAction
+    | SleepDone ()
 
 
 type PlayerAction
@@ -157,13 +160,18 @@ update msg model =
                 updatedLeftPaddle =
                     updatePaddle model.leftPaddleMovement model.leftPaddle
 
-                gameStatus =
+                ( gameStatus, cmd ) =
                     case maybeWinner updatedBall of
                         Nothing ->
-                            NoWinner
+                            ( NoWinner, Cmd.none )
 
                         Just player ->
-                            Winner player
+                            let
+                                delayCmd =
+                                    Process.sleep 500
+                                        |> Task.perform SleepDone
+                            in
+                            ( Winner player, delayCmd )
             in
             ( { model
                 | ball = updatedBall
@@ -171,7 +179,7 @@ update msg model =
                 , leftPaddle = updatedLeftPaddle
                 , gameStatus = gameStatus
               }
-            , Cmd.none
+            , cmd
             )
 
         KeyDown playerAction ->
@@ -217,6 +225,13 @@ update msg model =
                     ( { model | leftPaddleMovement = NotMoving }
                     , Cmd.none
                     )
+
+        SleepDone _ ->
+            let
+                _ =
+                    Debug.log "restart" "game"
+            in
+            ( model, Cmd.none )
 
 
 updatePaddle : PaddleMovement -> Paddle -> Paddle
