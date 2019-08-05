@@ -231,11 +231,12 @@ update msg model =
                     )
 
         SleepDone ->
-            let
-                _ =
-                    Debug.log "restart" "game"
-            in
-            ( model, Cmd.none )
+            ( { model
+                | ball = initBall
+                , gameStatus = NoWinner
+              }
+            , Cmd.none
+            )
 
 
 updatePaddle : PaddleMovement -> Paddle -> Paddle
