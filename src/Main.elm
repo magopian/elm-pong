@@ -13,6 +13,7 @@ type alias Model =
     , leftPaddle : Paddle
     , rightPaddleMovement : PaddleMovement
     , leftPaddleMovement : PaddleMovement
+    , gameStatus : GameStatus
     }
 
 
@@ -49,6 +50,11 @@ type Player
     | RightPlayer
 
 
+type GameStatus
+    = NoWinner
+    | Winner Player
+
+
 type Msg
     = OnAnimationFrame Float
     | KeyDown PlayerAction
@@ -73,6 +79,7 @@ init _ =
       , leftPaddle = LeftPaddle <| initPaddle 10
       , rightPaddleMovement = NotMoving
       , leftPaddleMovement = NotMoving
+      , gameStatus = NoWinner
       }
     , Cmd.none
     )
@@ -150,14 +157,19 @@ update msg model =
                 updatedLeftPaddle =
                     updatePaddle model.leftPaddleMovement model.leftPaddle
 
-                winner =
-                    maybeWinner updatedBall
-                        |> Debug.log "Winner"
+                gameStatus =
+                    case maybeWinner updatedBall of
+                        Nothing ->
+                            NoWinner
+
+                        Just player ->
+                            Winner player
             in
             ( { model
                 | ball = updatedBall
                 , rightPaddle = updatedRightPaddle
                 , leftPaddle = updatedLeftPaddle
+                , gameStatus = gameStatus
               }
             , Cmd.none
             )
