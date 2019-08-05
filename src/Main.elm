@@ -44,6 +44,11 @@ type PaddleMovement
     | NotMoving
 
 
+type Player
+    = LeftPlayer
+    | RightPlayer
+
+
 type Msg
     = OnAnimationFrame Float
     | KeyDown PlayerAction
@@ -144,6 +149,10 @@ update msg model =
 
                 updatedLeftPaddle =
                     updatePaddle model.leftPaddleMovement model.leftPaddle
+
+                winner =
+                    maybeWinner updatedBall
+                        |> Debug.log "Winner"
             in
             ( { model
                 | ball = updatedBall
@@ -251,6 +260,18 @@ shouldBallBounceVertically ball =
             ball.radius
     in
     ball.y <= radius || ball.y >= (500 - radius)
+
+
+maybeWinner : Ball -> Maybe Player
+maybeWinner ball =
+    if ball.x <= ball.radius then
+        Just RightPlayer
+
+    else if ball.x >= (500 - ball.radius) then
+        Just LeftPlayer
+
+    else
+        Nothing
 
 
 view : Model -> Svg.Svg Msg
