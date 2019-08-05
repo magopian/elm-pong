@@ -331,12 +331,17 @@ viewPaddle paddle =
 
 
 subscriptions : Model -> Sub Msg
-subscriptions _ =
-    Sub.batch
-        [ Browser.Events.onAnimationFrameDelta OnAnimationFrame
-        , Browser.Events.onKeyDown (Decode.map KeyDown keyDecoder)
-        , Browser.Events.onKeyUp (Decode.map KeyUp keyDecoder)
-        ]
+subscriptions model =
+    case model.gameStatus of
+        NoWinner ->
+            Sub.batch
+                [ Browser.Events.onAnimationFrameDelta OnAnimationFrame
+                , Browser.Events.onKeyDown (Decode.map KeyDown keyDecoder)
+                , Browser.Events.onKeyUp (Decode.map KeyUp keyDecoder)
+                ]
+
+        Winner _ ->
+            Sub.none
 
 
 keyDecoder : Decode.Decoder PlayerAction
