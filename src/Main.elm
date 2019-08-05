@@ -61,7 +61,7 @@ type Msg
     = OnAnimationFrame Float
     | KeyDown PlayerAction
     | KeyUp PlayerAction
-    | SleepDone ()
+    | SleepDone
 
 
 type PlayerAction
@@ -167,9 +167,13 @@ update msg model =
 
                         Just player ->
                             let
+                                alwaysSleepDone : a -> Msg
+                                alwaysSleepDone =
+                                    always SleepDone
+
                                 delayCmd =
                                     Process.sleep 500
-                                        |> Task.perform SleepDone
+                                        |> Task.perform alwaysSleepDone
                             in
                             ( Winner player, delayCmd )
             in
@@ -226,7 +230,7 @@ update msg model =
                     , Cmd.none
                     )
 
-        SleepDone _ ->
+        SleepDone ->
             let
                 _ =
                     Debug.log "restart" "game"
