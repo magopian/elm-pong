@@ -188,7 +188,6 @@ update msg model =
 
                                 updatedScore =
                                     updateScores model.score player
-                                        |> Debug.log "score"
                             in
                             ( Winner player, updatedScore, delayCmd )
             in
@@ -333,7 +332,7 @@ updateScores score winner =
 
 
 view : Model -> Svg.Svg Msg
-view { ball, rightPaddle, leftPaddle } =
+view { ball, rightPaddle, leftPaddle, score } =
     svg
         [ width "500"
         , height "500"
@@ -343,6 +342,7 @@ view { ball, rightPaddle, leftPaddle } =
         [ viewBall ball
         , viewPaddle rightPaddle
         , viewPaddle leftPaddle
+        , viewScore score
         ]
 
 
@@ -374,6 +374,19 @@ viewPaddle paddle =
         , height <| String.fromInt paddleInfo.height
         ]
         []
+
+
+viewScore : Score -> Svg.Svg Msg
+viewScore score =
+    g
+        [ fontSize "100px"
+        , fontFamily "monospace"
+        ]
+        [ text_ [ x "100", y "100", textAnchor "start" ]
+            [ text <| String.fromInt score.leftPlayerScore ]
+        , text_ [ x "400", y "100", textAnchor "end" ]
+            [ text <| String.fromInt score.rightPlayerScore ]
+        ]
 
 
 subscriptions : Model -> Sub Msg
