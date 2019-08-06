@@ -16,6 +16,7 @@ type alias Model =
     , rightPaddleMovement : PaddleMovement
     , leftPaddleMovement : PaddleMovement
     , gameStatus : GameStatus
+    , score : Score
     }
 
 
@@ -71,6 +72,12 @@ type PlayerAction
     | LeftPaddleDown
 
 
+type alias Score =
+    { rightPlayerScore : Int
+    , leftPlayerScore : Int
+    }
+
+
 type alias Flags =
     ()
 
@@ -83,6 +90,10 @@ init _ =
       , rightPaddleMovement = NotMoving
       , leftPaddleMovement = NotMoving
       , gameStatus = NoWinner
+      , score =
+            { rightPlayerScore = 0
+            , leftPlayerScore = 0
+            }
       }
     , Cmd.none
     )
@@ -160,10 +171,10 @@ update msg model =
                 updatedLeftPaddle =
                     updatePaddle model.leftPaddleMovement model.leftPaddle
 
-                ( gameStatus, cmd ) =
+                ( gameStatus, score, cmd ) =
                     case maybeWinner updatedBall of
                         Nothing ->
-                            ( NoWinner, Cmd.none )
+                            ( NoWinner, model.score, Cmd.none )
 
                         Just player ->
                             let
@@ -174,14 +185,19 @@ update msg model =
                                 delayCmd =
                                     Process.sleep 500
                                         |> Task.perform alwaysSleepDone
+
+                                updatedScore =
+                                    updateScores model.score player
+                                        |> Debug.log "score"
                             in
-                            ( Winner player, delayCmd )
+                            ( Winner player, updatedScore, delayCmd )
             in
             ( { model
                 | ball = updatedBall
                 , rightPaddle = updatedRightPaddle
                 , leftPaddle = updatedLeftPaddle
                 , gameStatus = gameStatus
+                , score = score
               }
             , cmd
             )
@@ -304,6 +320,16 @@ maybeWinner ball =
 
     else
         Nothing
+
+
+updateScores : Score -> Player -> Score
+updateScores score winner =
+    case winner of
+        RightPlayer ->
+            { score | rightPlayerScore = score.rightPlayerScore + 1 }
+
+        LeftPlayer ->
+            { score | leftPlayerScore = score.leftPlayerScore + 1 }
 
 
 view : Model -> Svg.Svg Msg
