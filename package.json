@@ -1,0 +1,32 @@
+{
+  "name": "elm-pong",
+  "version": "1.0.0",
+  "description": "A tutorial on how to make a pong game",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm run copy-assets && elm make src/Main.elm --optimize --output=build/app.js",
+    "copy-assets": "rimraf build && mkdir build && cp -r public/* build",
+    "debug": "elm-live --port=3000 --dir=public/ -- src/Main.elm  --output=public/app.js --debug",
+    "deploy": "npm run build && gh-pages --dist build/",
+    "live": "elm-live --port=3000 --dir=public/ -- src/Main.elm --output=public/app.js",
+    "test": "elm-test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/magopian/elm-pong.git"
+  },
+  "bugs": {
+    "url": "https://github.com/magopian/elm-pong/issues"
+  },
+  "homepage": "https://github.com/magopian/elm-pong#readme",
+  "author": "Magopian",
+  "license": "ISC",
+  "devDependencies": {
+    "elm": "^0.19.0-nodeps",
+    "elm-format": "^0.8.1",
+    "elm-live": "^3.0.6",
+    "elm-test": "^0.19.0",
+    "gh-pages": "^2.0.0",
+    "rimraf": "^2.6.2"
+  }
+}
