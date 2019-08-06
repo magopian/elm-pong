@@ -293,11 +293,13 @@ shouldBallBounce paddle ball =
             (ball.x - ball.radius <= x + width)
                 && (ball.y >= y)
                 && (ball.y <= y + height)
+                && (ball.horizSpeed < 0)
 
         RightPaddle { x, y, height } ->
             (ball.x + ball.radius >= x)
                 && (ball.y >= y)
                 && (ball.y <= y + height)
+                && (ball.horizSpeed > 0)
 
 
 shouldBallBounceVertically : Ball -> Bool
