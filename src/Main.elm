@@ -442,9 +442,9 @@ viewScore score =
         [ fontSize "100px"
         , fontFamily "monospace"
         ]
-        [ text_ [ x "100", y "100", textAnchor "start" ]
+        [ text_ [ x "50", y "100", textAnchor "start" ]
             [ text <| String.fromInt score.leftPlayerScore ]
-        , text_ [ x "400", y "100", textAnchor "end" ]
+        , text_ [ x "450", y "100", textAnchor "end" ]
             [ text <| String.fromInt score.rightPlayerScore ]
         ]
 
