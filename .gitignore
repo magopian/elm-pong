@@ -3,3 +3,4 @@ index.html
 node_modules/
 package-lock.json
 build/
+public/app.js
