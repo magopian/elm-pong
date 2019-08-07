@@ -158,12 +158,17 @@ update msg model =
                         ball.vertSpeed
 
                 updatedBall =
-                    { ball
-                        | x = ball.x + horizSpeed
-                        , y = ball.y + vertSpeed
-                        , horizSpeed = horizSpeed
-                        , vertSpeed = vertSpeed
-                    }
+                    case model.gameStatus of
+                        Winner _ ->
+                            ball
+
+                        NoWinner ->
+                            { ball
+                                | x = ball.x + horizSpeed
+                                , y = ball.y + vertSpeed
+                                , horizSpeed = horizSpeed
+                                , vertSpeed = vertSpeed
+                            }
 
                 updatedRightPaddle =
                     updatePaddle model.rightPaddleMovement model.rightPaddle
@@ -248,10 +253,6 @@ update msg model =
         SleepDone ->
             ( { model
                 | ball = initBall
-                , rightPaddle = RightPaddle <| initPaddle 480
-                , leftPaddle = LeftPaddle <| initPaddle 10
-                , rightPaddleMovement = NotMoving
-                , leftPaddleMovement = NotMoving
                 , gameStatus = NoWinner
               }
             , Cmd.none
@@ -397,16 +398,11 @@ viewScore score =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    case model.gameStatus of
-        NoWinner ->
-            Sub.batch
-                [ Browser.Events.onAnimationFrameDelta OnAnimationFrame
-                , Browser.Events.onKeyDown (Decode.map KeyDown keyDecoder)
-                , Browser.Events.onKeyUp (Decode.map KeyUp keyDecoder)
-                ]
-
-        Winner _ ->
-            Sub.none
+    Sub.batch
+        [ Browser.Events.onAnimationFrameDelta OnAnimationFrame
+        , Browser.Events.onKeyDown (Decode.map KeyDown keyDecoder)
+        , Browser.Events.onKeyUp (Decode.map KeyUp keyDecoder)
+        ]
 
 
 keyDecoder : Decode.Decoder PlayerAction
