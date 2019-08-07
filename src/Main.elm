@@ -228,26 +228,40 @@ updateBall :
     -> Ball
 updateBall { gameStatus, ball, rightPaddle, leftPaddle } =
     let
-        shouldBounce =
-            shouldBallBounce rightPaddle ball
-                || shouldBallBounce leftPaddle ball
+        maybeRightDistance =
+            maybeBounceDistanceFromCenter rightPaddle ball
 
-        horizSpeed =
-            if shouldBounce then
-                ball.horizSpeed * -1
+        maybeLeftDistance =
+            maybeBounceDistanceFromCenter leftPaddle ball
+
+        maybeDistance =
+            -- Combine the two maybes and keep the one that isn't Nothing, if any.
+            if maybeRightDistance == Nothing then
+                maybeLeftDistance
 
             else
-                ball.horizSpeed
+                maybeRightDistance
+
+        ( horizSpeed, bouncedVertSpeed ) =
+            case maybeDistance of
+                Nothing ->
+                    -- No bounce
+                    ( ball.horizSpeed, ball.vertSpeed )
+
+                Just distance ->
+                    ( ball.horizSpeed * -1
+                    , distance // 10
+                    )
 
         shouldBounceVertically =
             shouldBallBounceVertically ball
 
         vertSpeed =
             if shouldBounceVertically then
-                ball.vertSpeed * -1
+                bouncedVertSpeed * -1
 
             else
-                ball.vertSpeed
+                bouncedVertSpeed
     in
     case gameStatus of
         Winner _ ->
@@ -294,20 +308,40 @@ updatePaddle movement paddle =
                 |> LeftPaddle
 
 
-shouldBallBounce : Paddle -> Ball -> Bool
-shouldBallBounce paddle ball =
+maybeBounceDistanceFromCenter : Paddle -> Ball -> Maybe Int
+maybeBounceDistanceFromCenter paddle ball =
+    -- If the ball bounces, return Just the distance from the paddle center in
+    -- percentage, so -100% if it's the very top of the paddle, 100% if it's
+    -- the very bottom of the paddle.
+    let
+        normalize : Int -> Int -> Int
+        normalize distance height =
+            (distance - (height // 2)) * 100 // (height // 2)
+    in
     case paddle of
         LeftPaddle { x, y, width, height } ->
-            (ball.x - ball.radius <= x + width)
-                && (ball.y >= y)
-                && (ball.y <= y + height)
-                && (ball.horizSpeed < 0)
+            if
+                (ball.x - ball.radius <= x + width)
+                    && (ball.y >= y)
+                    && (ball.y <= y + height)
+                    && (ball.horizSpeed < 0)
+            then
+                Just <| normalize (ball.y - y) height
+
+            else
+                Nothing
 
         RightPaddle { x, y, height } ->
-            (ball.x + ball.radius >= x)
-                && (ball.y >= y)
-                && (ball.y <= y + height)
-                && (ball.horizSpeed > 0)
+            if
+                (ball.x + ball.radius >= x)
+                    && (ball.y >= y)
+                    && (ball.y <= y + height)
+                    && (ball.horizSpeed > 0)
+            then
+                Just <| normalize (ball.y - y) height
+
+            else
+                Nothing
 
 
 shouldBallBounceVertically : Ball -> Bool
