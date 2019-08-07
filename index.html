@@ -5725,24 +5725,30 @@ var elm$core$Basics$ge = _Utils_ge;
 var author$project$Main$maybeWinner = function (ball) {
 	return (_Utils_cmp(ball.f, ball.o) < 1) ? elm$core$Maybe$Just(1) : ((_Utils_cmp(ball.f, 500 - ball.o) > -1) ? elm$core$Maybe$Just(0) : elm$core$Maybe$Nothing);
 };
-var author$project$Main$shouldBallBounce = F2(
+var author$project$Main$maybeBounceDistanceFromCenter = F2(
 	function (paddle, ball) {
+		var normalize = F2(
+			function (distance, height) {
+				return (((distance - ((height / 2) | 0)) * 100) / ((height / 2) | 0)) | 0;
+			});
 		if (paddle.$ === 1) {
 			var x = paddle.a.f;
 			var y = paddle.a.a;
 			var width = paddle.a.S;
 			var height = paddle.a.r;
-			return (_Utils_cmp(ball.f - ball.o, x + width) < 1) && ((_Utils_cmp(ball.a, y) > -1) && ((_Utils_cmp(ball.a, y + height) < 1) && (ball.s < 0)));
+			return ((_Utils_cmp(ball.f, x + width) < 1) && ((_Utils_cmp(ball.a, y) > -1) && ((_Utils_cmp(ball.a, y + height) < 1) && (ball.s < 0)))) ? elm$core$Maybe$Just(
+				A2(normalize, ball.a - y, height)) : elm$core$Maybe$Nothing;
 		} else {
 			var x = paddle.a.f;
 			var y = paddle.a.a;
 			var height = paddle.a.r;
-			return (_Utils_cmp(ball.f + ball.o, x) > -1) && ((_Utils_cmp(ball.a, y) > -1) && ((_Utils_cmp(ball.a, y + height) < 1) && (ball.s > 0)));
+			return ((_Utils_cmp(ball.f + ball.o, x) > -1) && ((_Utils_cmp(ball.a, y) > -1) && ((_Utils_cmp(ball.a, y + height) < 1) && (ball.s > 0)))) ? elm$core$Maybe$Just(
+				A2(normalize, ball.a - y, height)) : elm$core$Maybe$Nothing;
 		}
 	});
 var author$project$Main$shouldBallBounceVertically = function (ball) {
-	var radius = ball.o;
-	return (_Utils_cmp(ball.a, radius) < 1) || (_Utils_cmp(ball.a, 500 - radius) > -1);
+	var size = ball.o;
+	return (_Utils_cmp(ball.a, size) < 1) || (_Utils_cmp(ball.a, 500 - size) > -1);
 };
 var elm$core$Basics$negate = function (n) {
 	return -n;
@@ -5753,9 +5759,20 @@ var author$project$Main$updateBall = function (_n0) {
 	var rightPaddle = _n0.E;
 	var leftPaddle = _n0.B;
 	var shouldBounceVertically = author$project$Main$shouldBallBounceVertically(ball);
-	var vertSpeed = shouldBounceVertically ? (ball.R * (-1)) : ball.R;
-	var shouldBounce = A2(author$project$Main$shouldBallBounce, rightPaddle, ball) || A2(author$project$Main$shouldBallBounce, leftPaddle, ball);
-	var horizSpeed = shouldBounce ? (ball.s * (-1)) : ball.s;
+	var maybeRightDistance = A2(author$project$Main$maybeBounceDistanceFromCenter, rightPaddle, ball);
+	var maybeLeftDistance = A2(author$project$Main$maybeBounceDistanceFromCenter, leftPaddle, ball);
+	var maybeDistance = _Utils_eq(maybeRightDistance, elm$core$Maybe$Nothing) ? maybeLeftDistance : maybeRightDistance;
+	var _n1 = function () {
+		if (maybeDistance.$ === 1) {
+			return _Utils_Tuple2(ball.s, ball.R);
+		} else {
+			var distance = maybeDistance.a;
+			return _Utils_Tuple2(ball.s * (-1), (distance / 10) | 0);
+		}
+	}();
+	var horizSpeed = _n1.a;
+	var bouncedVertSpeed = _n1.b;
+	var vertSpeed = shouldBounceVertically ? (bouncedVertSpeed * (-1)) : bouncedVertSpeed;
 	if (gameStatus.$ === 1) {
 		return ball;
 	} else {
@@ -5925,32 +5942,48 @@ var author$project$Main$update = F2(
 		}
 	});
 var elm$svg$Svg$trustedNode = _VirtualDom_nodeNS('http://www.w3.org/2000/svg');
-var elm$svg$Svg$circle = elm$svg$Svg$trustedNode('circle');
-var elm$svg$Svg$Attributes$cx = _VirtualDom_attribute('cx');
-var elm$svg$Svg$Attributes$cy = _VirtualDom_attribute('cy');
-var elm$svg$Svg$Attributes$r = _VirtualDom_attribute('r');
-var author$project$Main$viewBall = function (_n0) {
-	var x = _n0.f;
-	var y = _n0.a;
-	var radius = _n0.o;
-	return A2(
-		elm$svg$Svg$circle,
-		_List_fromArray(
-			[
-				elm$svg$Svg$Attributes$cx(
-				elm$core$String$fromInt(x)),
-				elm$svg$Svg$Attributes$cy(
-				elm$core$String$fromInt(y)),
-				elm$svg$Svg$Attributes$r(
-				elm$core$String$fromInt(radius))
-			]),
-		_List_Nil);
-};
 var elm$svg$Svg$rect = elm$svg$Svg$trustedNode('rect');
 var elm$svg$Svg$Attributes$height = _VirtualDom_attribute('height');
 var elm$svg$Svg$Attributes$width = _VirtualDom_attribute('width');
 var elm$svg$Svg$Attributes$x = _VirtualDom_attribute('x');
 var elm$svg$Svg$Attributes$y = _VirtualDom_attribute('y');
+var author$project$Main$viewBall = function (ball) {
+	return A2(
+		elm$svg$Svg$rect,
+		_List_fromArray(
+			[
+				elm$svg$Svg$Attributes$x(
+				elm$core$String$fromInt(ball.f)),
+				elm$svg$Svg$Attributes$y(
+				elm$core$String$fromInt(ball.a)),
+				elm$svg$Svg$Attributes$width(
+				elm$core$String$fromInt(ball.o)),
+				elm$svg$Svg$Attributes$height(
+				elm$core$String$fromInt(ball.o))
+			]),
+		_List_Nil);
+};
+var elm$svg$Svg$line = elm$svg$Svg$trustedNode('line');
+var elm$svg$Svg$Attributes$stroke = _VirtualDom_attribute('stroke');
+var elm$svg$Svg$Attributes$strokeDasharray = _VirtualDom_attribute('stroke-dasharray');
+var elm$svg$Svg$Attributes$strokeWidth = _VirtualDom_attribute('stroke-width');
+var elm$svg$Svg$Attributes$x1 = _VirtualDom_attribute('x1');
+var elm$svg$Svg$Attributes$x2 = _VirtualDom_attribute('x2');
+var elm$svg$Svg$Attributes$y1 = _VirtualDom_attribute('y1');
+var elm$svg$Svg$Attributes$y2 = _VirtualDom_attribute('y2');
+var author$project$Main$viewDivider = A2(
+	elm$svg$Svg$line,
+	_List_fromArray(
+		[
+			elm$svg$Svg$Attributes$x1('249'),
+			elm$svg$Svg$Attributes$y1('0'),
+			elm$svg$Svg$Attributes$x2('249'),
+			elm$svg$Svg$Attributes$y2('500'),
+			elm$svg$Svg$Attributes$stroke('black'),
+			elm$svg$Svg$Attributes$strokeDasharray('4'),
+			elm$svg$Svg$Attributes$strokeWidth('2')
+		]),
+	_List_Nil);
 var author$project$Main$viewPaddle = function (paddle) {
 	var paddleInfo = function () {
 		if (paddle.$ === 1) {
@@ -6040,6 +6073,7 @@ var author$project$Main$view = function (_n0) {
 			]),
 		_List_fromArray(
 			[
+				author$project$Main$viewDivider,
 				author$project$Main$viewBall(ball),
 				author$project$Main$viewPaddle(rightPaddle),
 				author$project$Main$viewPaddle(leftPaddle),
