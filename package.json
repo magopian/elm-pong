@@ -1,0 +1,28 @@
+{
+  "name": "elm-pong",
+  "version": "1.0.0",
+  "description": "A tutorial on how to make a pong game in elm. Follow-along blog post: http://mathieu.agopian.info/blog/making-a-pong-game-in-elm.html",
+  "main": "index.js",
+  "scripts": {
+    "build": "elm make src/Main.elm --optimize",
+    "deploy": "npm run build && gh-pages --dist ./ --src index.html",
+    "debug": "elm-live src/Main.elm -- --debug",
+    "live": "elm-live src/Main.elm"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/magopian/elm-pong.git"
+  },
+  "bugs": {
+    "url": "https://github.com/magopian/elm-pong/issues"
+  },
+  "homepage": "https://github.com/magopian/elm-pong#readme",
+  "author": "Magopian",
+  "license": "ISC",
+  "devDependencies": {
+    "elm": "^0.19.0-nodeps",
+    "elm-format": "^0.8.1",
+    "elm-live": "^3.0.6",
+    "gh-pages": "^2.0.0"
+  }
+}
