@@ -177,11 +177,8 @@ update msg model =
                     updatePaddle model.leftPaddleMovement model.leftPaddle
 
                 ( gameStatus, score, cmd ) =
-                    case maybeWinner updatedBall of
-                        Nothing ->
-                            ( NoWinner, model.score, Cmd.none )
-
-                        Just player ->
+                    case ( maybeWinner updatedBall, model.gameStatus ) of
+                        ( Just player, NoWinner ) ->
                             let
                                 alwaysSleepDone : a -> Msg
                                 alwaysSleepDone =
@@ -195,6 +192,9 @@ update msg model =
                                     updateScores model.score player
                             in
                             ( Winner player, updatedScore, delayCmd )
+
+                        _ ->
+                            ( model.gameStatus, model.score, Cmd.none )
             in
             ( { model
                 | ball = updatedBall
