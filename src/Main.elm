@@ -383,11 +383,26 @@ view { ball, rightPaddle, leftPaddle, score } =
         , viewBox "0 0 500 500"
         , Svg.Attributes.style "background: #efefef"
         ]
-        [ viewBall ball
+        [ viewDivider
+        , viewBall ball
         , viewPaddle rightPaddle
         , viewPaddle leftPaddle
         , viewScore score
         ]
+
+
+viewDivider : Svg.Svg Msg
+viewDivider =
+    line
+        [ x1 "249"
+        , y1 "0"
+        , x2 "249"
+        , y2 "500"
+        , stroke "black"
+        , strokeDasharray "4"
+        , strokeWidth "2"
+        ]
+        []
 
 
 viewBall : Ball -> Svg.Svg Msg
