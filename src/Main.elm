@@ -62,7 +62,7 @@ type Msg
     = OnAnimationFrame Float
     | KeyDown PlayerAction
     | KeyUp PlayerAction
-    | SleepDone
+    | RestartGame
     | NewWinner Player
 
 
@@ -153,16 +153,16 @@ update msg model =
 
         NewWinner player ->
             let
-                alwaysSleepDone : a -> Msg
-                alwaysSleepDone =
-                    always SleepDone
+                alwaysRestartGame : a -> Msg
+                alwaysRestartGame =
+                    always RestartGame
 
                 updatedScore =
                     updateScores model.score player
             in
             ( { model | gameStatus = Winner player, score = updatedScore }
             , Process.sleep 500
-                |> Task.perform alwaysSleepDone
+                |> Task.perform alwaysRestartGame
             )
 
         KeyDown playerAction ->
@@ -209,7 +209,7 @@ update msg model =
                     , Cmd.none
                     )
 
-        SleepDone ->
+        RestartGame ->
             ( { model
                 | ball = initBall
                 , gameStatus = NoWinner
