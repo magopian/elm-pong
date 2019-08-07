@@ -794,11 +794,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.W.K === region.aa.K)
+	if (region.W.J === region.aa.J)
 	{
-		return 'on line ' + region.W.K;
+		return 'on line ' + region.W.J;
 	}
-	return 'on lines ' + region.W.K + ' through ' + region.aa.K;
+	return 'on lines ' + region.W.J + ' through ' + region.aa.J;
 }
 
 
@@ -2669,7 +2669,7 @@ var _VirtualDom_mapEventTuple = F2(function(func, tuple)
 var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
-		n: func(record.n),
+		m: func(record.m),
 		X: record.X,
 		V: record.V
 	}
@@ -2939,7 +2939,7 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 		// 3 = Custom
 
 		var value = result.a;
-		var message = !tag ? value : tag < 3 ? value.a : value.n;
+		var message = !tag ? value : tag < 3 ? value.a : value.m;
 		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.X;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
@@ -4202,7 +4202,7 @@ function _Browser_getViewport()
 			f: _Browser_window.pageXOffset,
 			a: _Browser_window.pageYOffset,
 			S: _Browser_doc.documentElement.clientWidth,
-			s: _Browser_doc.documentElement.clientHeight
+			r: _Browser_doc.documentElement.clientHeight
 		}
 	};
 }
@@ -4213,7 +4213,7 @@ function _Browser_getScene()
 	var elem = _Browser_doc.documentElement;
 	return {
 		S: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
-		s: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
+		r: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
 	};
 }
 
@@ -4238,13 +4238,13 @@ function _Browser_getViewportOf(id)
 		return {
 			aq: {
 				S: node.scrollWidth,
-				s: node.scrollHeight
+				r: node.scrollHeight
 			},
 			at: {
 				f: node.scrollLeft,
 				a: node.scrollTop,
 				S: node.clientWidth,
-				s: node.clientHeight
+				r: node.clientHeight
 			}
 		};
 	});
@@ -4279,13 +4279,13 @@ function _Browser_getElement(id)
 				f: x,
 				a: y,
 				S: _Browser_doc.documentElement.clientWidth,
-				s: _Browser_doc.documentElement.clientHeight
+				r: _Browser_doc.documentElement.clientHeight
 			},
 			ay: {
 				f: x + rect.left,
 				a: y + rect.top,
 				S: rect.width,
-				s: rect.height
+				r: rect.height
 			}
 		};
 	});
@@ -4328,9 +4328,9 @@ var author$project$Main$NotMoving = 2;
 var author$project$Main$RightPaddle = function (a) {
 	return {$: 0, a: a};
 };
-var author$project$Main$initBall = {t: 4, p: 10, R: 2, f: 250, a: 250};
+var author$project$Main$initBall = {s: 4, o: 10, R: 2, f: 250, a: 250};
 var author$project$Main$initPaddle = function (initialX) {
-	return {s: 50, S: 10, f: initialX, a: 225};
+	return {r: 50, S: 10, f: initialX, a: 225};
 };
 var elm$core$Basics$apL = F2(
 	function (f, x) {
@@ -4812,15 +4812,15 @@ var elm$core$Platform$Cmd$none = elm$core$Platform$Cmd$batch(_List_Nil);
 var author$project$Main$init = function (_n0) {
 	return _Utils_Tuple2(
 		{
-			j: author$project$Main$initBall,
-			I: author$project$Main$NoWinner,
-			A: author$project$Main$LeftPaddle(
+			y: author$project$Main$initBall,
+			A: author$project$Main$NoWinner,
+			B: author$project$Main$LeftPaddle(
 				author$project$Main$initPaddle(10)),
-			u: 2,
-			D: author$project$Main$RightPaddle(
+			t: 2,
+			E: author$project$Main$RightPaddle(
 				author$project$Main$initPaddle(480)),
-			x: 2,
-			E: {J: 0, L: 0}
+			w: 2,
+			L: {I: 0, K: 0}
 		},
 		elm$core$Platform$Cmd$none);
 };
@@ -5699,26 +5699,23 @@ var elm$browser$Browser$Events$on = F3(
 var elm$browser$Browser$Events$onKeyDown = A2(elm$browser$Browser$Events$on, 0, 'keydown');
 var elm$browser$Browser$Events$onKeyUp = A2(elm$browser$Browser$Events$on, 0, 'keyup');
 var elm$core$Platform$Sub$batch = _Platform_batch;
-var elm$core$Platform$Sub$none = elm$core$Platform$Sub$batch(_List_Nil);
 var author$project$Main$subscriptions = function (model) {
-	var _n0 = model.I;
-	if (!_n0.$) {
-		return elm$core$Platform$Sub$batch(
-			_List_fromArray(
-				[
-					elm$browser$Browser$Events$onAnimationFrameDelta(author$project$Main$OnAnimationFrame),
-					elm$browser$Browser$Events$onKeyDown(
-					A2(elm$json$Json$Decode$map, author$project$Main$KeyDown, author$project$Main$keyDecoder)),
-					elm$browser$Browser$Events$onKeyUp(
-					A2(elm$json$Json$Decode$map, author$project$Main$KeyUp, author$project$Main$keyDecoder))
-				]));
-	} else {
-		return elm$core$Platform$Sub$none;
-	}
+	return elm$core$Platform$Sub$batch(
+		_List_fromArray(
+			[
+				elm$browser$Browser$Events$onAnimationFrameDelta(author$project$Main$OnAnimationFrame),
+				elm$browser$Browser$Events$onKeyDown(
+				A2(elm$json$Json$Decode$map, author$project$Main$KeyDown, author$project$Main$keyDecoder)),
+				elm$browser$Browser$Events$onKeyUp(
+				A2(elm$json$Json$Decode$map, author$project$Main$KeyUp, author$project$Main$keyDecoder))
+			]));
 };
 var author$project$Main$MovingDown = 1;
 var author$project$Main$MovingUp = 0;
-var author$project$Main$SleepDone = {$: 3};
+var author$project$Main$NewWinner = function (a) {
+	return {$: 4, a: a};
+};
+var author$project$Main$RestartGame = {$: 3};
 var author$project$Main$Winner = function (a) {
 	return {$: 1, a: a};
 };
@@ -5726,7 +5723,7 @@ var author$project$Main$LeftPlayer = 0;
 var author$project$Main$RightPlayer = 1;
 var elm$core$Basics$ge = _Utils_ge;
 var author$project$Main$maybeWinner = function (ball) {
-	return (_Utils_cmp(ball.f, ball.p) < 1) ? elm$core$Maybe$Just(1) : ((_Utils_cmp(ball.f, 500 - ball.p) > -1) ? elm$core$Maybe$Just(0) : elm$core$Maybe$Nothing);
+	return (_Utils_cmp(ball.f, ball.o) < 1) ? elm$core$Maybe$Just(1) : ((_Utils_cmp(ball.f, 500 - ball.o) > -1) ? elm$core$Maybe$Just(0) : elm$core$Maybe$Nothing);
 };
 var author$project$Main$shouldBallBounce = F2(
 	function (paddle, ball) {
@@ -5734,26 +5731,43 @@ var author$project$Main$shouldBallBounce = F2(
 			var x = paddle.a.f;
 			var y = paddle.a.a;
 			var width = paddle.a.S;
-			var height = paddle.a.s;
-			return (_Utils_cmp(ball.f - ball.p, x + width) < 1) && ((_Utils_cmp(ball.a, y) > -1) && ((_Utils_cmp(ball.a, y + height) < 1) && (ball.t < 0)));
+			var height = paddle.a.r;
+			return (_Utils_cmp(ball.f - ball.o, x + width) < 1) && ((_Utils_cmp(ball.a, y) > -1) && ((_Utils_cmp(ball.a, y + height) < 1) && (ball.s < 0)));
 		} else {
 			var x = paddle.a.f;
 			var y = paddle.a.a;
-			var height = paddle.a.s;
-			return (_Utils_cmp(ball.f + ball.p, x) > -1) && ((_Utils_cmp(ball.a, y) > -1) && ((_Utils_cmp(ball.a, y + height) < 1) && (ball.t > 0)));
+			var height = paddle.a.r;
+			return (_Utils_cmp(ball.f + ball.o, x) > -1) && ((_Utils_cmp(ball.a, y) > -1) && ((_Utils_cmp(ball.a, y + height) < 1) && (ball.s > 0)));
 		}
 	});
 var author$project$Main$shouldBallBounceVertically = function (ball) {
-	var radius = ball.p;
+	var radius = ball.o;
 	return (_Utils_cmp(ball.a, radius) < 1) || (_Utils_cmp(ball.a, 500 - radius) > -1);
+};
+var elm$core$Basics$negate = function (n) {
+	return -n;
+};
+var author$project$Main$updateBall = function (_n0) {
+	var gameStatus = _n0.A;
+	var ball = _n0.y;
+	var rightPaddle = _n0.E;
+	var leftPaddle = _n0.B;
+	var shouldBounceVertically = author$project$Main$shouldBallBounceVertically(ball);
+	var vertSpeed = shouldBounceVertically ? (ball.R * (-1)) : ball.R;
+	var shouldBounce = A2(author$project$Main$shouldBallBounce, rightPaddle, ball) || A2(author$project$Main$shouldBallBounce, leftPaddle, ball);
+	var horizSpeed = shouldBounce ? (ball.s * (-1)) : ball.s;
+	if (gameStatus.$ === 1) {
+		return ball;
+	} else {
+		return _Utils_update(
+			ball,
+			{s: horizSpeed, R: vertSpeed, f: ball.f + horizSpeed, a: ball.a + vertSpeed});
+	}
 };
 var elm$core$Basics$clamp = F3(
 	function (low, high, number) {
 		return (_Utils_cmp(number, low) < 0) ? low : ((_Utils_cmp(number, high) > 0) ? high : number);
 	});
-var elm$core$Basics$negate = function (n) {
-	return -n;
-};
 var author$project$Main$updatePaddle = F2(
 	function (movement, paddle) {
 		var amount = function () {
@@ -5772,7 +5786,7 @@ var author$project$Main$updatePaddle = F2(
 				_Utils_update(
 					paddleInfo,
 					{
-						a: A3(elm$core$Basics$clamp, 0, 500 - paddleInfo.s, paddleInfo.a + amount)
+						a: A3(elm$core$Basics$clamp, 0, 500 - paddleInfo.r, paddleInfo.a + amount)
 					}));
 		} else {
 			var paddleInfo = paddle.a;
@@ -5780,7 +5794,7 @@ var author$project$Main$updatePaddle = F2(
 				_Utils_update(
 					paddleInfo,
 					{
-						a: A3(elm$core$Basics$clamp, 0, 500 - paddleInfo.s, paddleInfo.a + amount)
+						a: A3(elm$core$Basics$clamp, 0, 500 - paddleInfo.r, paddleInfo.a + amount)
 					}));
 		}
 	});
@@ -5789,11 +5803,11 @@ var author$project$Main$updateScores = F2(
 		if (winner === 1) {
 			return _Utils_update(
 				score,
-				{L: score.L + 1});
+				{K: score.K + 1});
 		} else {
 			return _Utils_update(
 				score,
-				{J: score.J + 1});
+				{I: score.I + 1});
 		}
 	});
 var elm$core$Basics$always = F2(
@@ -5803,107 +5817,111 @@ var elm$core$Basics$always = F2(
 var elm$core$Process$sleep = _Process_sleep;
 var author$project$Main$update = F2(
 	function (msg, model) {
-		switch (msg.$) {
-			case 0:
-				var timeDelta = msg.a;
-				var updatedRightPaddle = A2(author$project$Main$updatePaddle, model.x, model.D);
-				var updatedLeftPaddle = A2(author$project$Main$updatePaddle, model.u, model.A);
-				var shouldBounceVertically = author$project$Main$shouldBallBounceVertically(model.j);
-				var shouldBounce = A2(author$project$Main$shouldBallBounce, model.D, model.j) || A2(author$project$Main$shouldBallBounce, model.A, model.j);
-				var ball = model.j;
-				var horizSpeed = shouldBounce ? (ball.t * (-1)) : ball.t;
-				var vertSpeed = shouldBounceVertically ? (ball.R * (-1)) : ball.R;
-				var updatedBall = _Utils_update(
-					ball,
-					{t: horizSpeed, R: vertSpeed, f: ball.f + horizSpeed, a: ball.a + vertSpeed});
-				var _n1 = function () {
-					var _n2 = author$project$Main$maybeWinner(updatedBall);
-					if (_n2.$ === 1) {
-						return _Utils_Tuple3(author$project$Main$NoWinner, model.E, elm$core$Platform$Cmd$none);
+		update:
+		while (true) {
+			switch (msg.$) {
+				case 0:
+					var timeDelta = msg.a;
+					var updatedBall = author$project$Main$updateBall(model);
+					var updatedModel = _Utils_update(
+						model,
+						{
+							y: updatedBall,
+							B: A2(author$project$Main$updatePaddle, model.t, model.B),
+							E: A2(author$project$Main$updatePaddle, model.w, model.E)
+						});
+					var _n1 = _Utils_Tuple2(
+						author$project$Main$maybeWinner(updatedBall),
+						model.A);
+					if ((!_n1.a.$) && (!_n1.b.$)) {
+						var player = _n1.a.a;
+						var _n2 = _n1.b;
+						var $temp$msg = author$project$Main$NewWinner(player),
+							$temp$model = updatedModel;
+						msg = $temp$msg;
+						model = $temp$model;
+						continue update;
 					} else {
-						var player = _n2.a;
-						var updatedScore = A2(author$project$Main$updateScores, model.E, player);
-						var alwaysSleepDone = elm$core$Basics$always(author$project$Main$SleepDone);
-						var delayCmd = A2(
-							elm$core$Task$perform,
-							alwaysSleepDone,
-							elm$core$Process$sleep(500));
-						return _Utils_Tuple3(
-							author$project$Main$Winner(player),
-							updatedScore,
-							delayCmd);
+						return _Utils_Tuple2(updatedModel, elm$core$Platform$Cmd$none);
 					}
-				}();
-				var gameStatus = _n1.a;
-				var score = _n1.b;
-				var cmd = _n1.c;
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{j: updatedBall, I: gameStatus, A: updatedLeftPaddle, D: updatedRightPaddle, E: score}),
-					cmd);
-			case 1:
-				var playerAction = msg.a;
-				switch (playerAction) {
-					case 0:
-						return _Utils_Tuple2(
-							_Utils_update(
-								model,
-								{x: 0}),
-							elm$core$Platform$Cmd$none);
-					case 1:
-						return _Utils_Tuple2(
-							_Utils_update(
-								model,
-								{x: 1}),
-							elm$core$Platform$Cmd$none);
-					case 2:
-						return _Utils_Tuple2(
-							_Utils_update(
-								model,
-								{u: 0}),
-							elm$core$Platform$Cmd$none);
-					default:
-						return _Utils_Tuple2(
-							_Utils_update(
-								model,
-								{u: 1}),
-							elm$core$Platform$Cmd$none);
-				}
-			case 2:
-				var playerAction = msg.a;
-				switch (playerAction) {
-					case 0:
-						return _Utils_Tuple2(
-							_Utils_update(
-								model,
-								{x: 2}),
-							elm$core$Platform$Cmd$none);
-					case 1:
-						return _Utils_Tuple2(
-							_Utils_update(
-								model,
-								{x: 2}),
-							elm$core$Platform$Cmd$none);
-					case 2:
-						return _Utils_Tuple2(
-							_Utils_update(
-								model,
-								{u: 2}),
-							elm$core$Platform$Cmd$none);
-					default:
-						return _Utils_Tuple2(
-							_Utils_update(
-								model,
-								{u: 2}),
-							elm$core$Platform$Cmd$none);
-				}
-			default:
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{j: author$project$Main$initBall, I: author$project$Main$NoWinner}),
-					elm$core$Platform$Cmd$none);
+				case 4:
+					var player = msg.a;
+					var updatedScore = A2(author$project$Main$updateScores, model.L, player);
+					var alwaysRestartGame = elm$core$Basics$always(author$project$Main$RestartGame);
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
+								A: author$project$Main$Winner(player),
+								L: updatedScore
+							}),
+						A2(
+							elm$core$Task$perform,
+							alwaysRestartGame,
+							elm$core$Process$sleep(500)));
+				case 1:
+					var playerAction = msg.a;
+					switch (playerAction) {
+						case 0:
+							return _Utils_Tuple2(
+								_Utils_update(
+									model,
+									{w: 0}),
+								elm$core$Platform$Cmd$none);
+						case 1:
+							return _Utils_Tuple2(
+								_Utils_update(
+									model,
+									{w: 1}),
+								elm$core$Platform$Cmd$none);
+						case 2:
+							return _Utils_Tuple2(
+								_Utils_update(
+									model,
+									{t: 0}),
+								elm$core$Platform$Cmd$none);
+						default:
+							return _Utils_Tuple2(
+								_Utils_update(
+									model,
+									{t: 1}),
+								elm$core$Platform$Cmd$none);
+					}
+				case 2:
+					var playerAction = msg.a;
+					switch (playerAction) {
+						case 0:
+							return _Utils_Tuple2(
+								_Utils_update(
+									model,
+									{w: 2}),
+								elm$core$Platform$Cmd$none);
+						case 1:
+							return _Utils_Tuple2(
+								_Utils_update(
+									model,
+									{w: 2}),
+								elm$core$Platform$Cmd$none);
+						case 2:
+							return _Utils_Tuple2(
+								_Utils_update(
+									model,
+									{t: 2}),
+								elm$core$Platform$Cmd$none);
+						default:
+							return _Utils_Tuple2(
+								_Utils_update(
+									model,
+									{t: 2}),
+								elm$core$Platform$Cmd$none);
+					}
+				default:
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{y: author$project$Main$initBall, A: author$project$Main$NoWinner}),
+						elm$core$Platform$Cmd$none);
+			}
 		}
 	});
 var elm$svg$Svg$trustedNode = _VirtualDom_nodeNS('http://www.w3.org/2000/svg');
@@ -5914,7 +5932,7 @@ var elm$svg$Svg$Attributes$r = _VirtualDom_attribute('r');
 var author$project$Main$viewBall = function (_n0) {
 	var x = _n0.f;
 	var y = _n0.a;
-	var radius = _n0.p;
+	var radius = _n0.o;
 	return A2(
 		elm$svg$Svg$circle,
 		_List_fromArray(
@@ -5954,7 +5972,7 @@ var author$project$Main$viewPaddle = function (paddle) {
 				elm$svg$Svg$Attributes$width(
 				elm$core$String$fromInt(paddleInfo.S)),
 				elm$svg$Svg$Attributes$height(
-				elm$core$String$fromInt(paddleInfo.s))
+				elm$core$String$fromInt(paddleInfo.r))
 			]),
 		_List_Nil);
 };
@@ -5986,7 +6004,7 @@ var author$project$Main$viewScore = function (score) {
 				_List_fromArray(
 					[
 						elm$svg$Svg$text(
-						elm$core$String$fromInt(score.J))
+						elm$core$String$fromInt(score.I))
 					])),
 				A2(
 				elm$svg$Svg$text_,
@@ -5999,7 +6017,7 @@ var author$project$Main$viewScore = function (score) {
 				_List_fromArray(
 					[
 						elm$svg$Svg$text(
-						elm$core$String$fromInt(score.L))
+						elm$core$String$fromInt(score.K))
 					]))
 			]));
 };
@@ -6007,10 +6025,10 @@ var elm$svg$Svg$svg = elm$svg$Svg$trustedNode('svg');
 var elm$svg$Svg$Attributes$style = _VirtualDom_attribute('style');
 var elm$svg$Svg$Attributes$viewBox = _VirtualDom_attribute('viewBox');
 var author$project$Main$view = function (_n0) {
-	var ball = _n0.j;
-	var rightPaddle = _n0.D;
-	var leftPaddle = _n0.A;
-	var score = _n0.E;
+	var ball = _n0.y;
+	var rightPaddle = _n0.E;
+	var leftPaddle = _n0.B;
+	var score = _n0.L;
 	return A2(
 		elm$svg$Svg$svg,
 		_List_fromArray(
