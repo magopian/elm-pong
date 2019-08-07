@@ -23,7 +23,7 @@ type alias Model =
 type alias Ball =
     { x : Int
     , y : Int
-    , radius : Int
+    , size : Int
     , horizSpeed : Int
     , vertSpeed : Int
     }
@@ -104,7 +104,7 @@ initBall : Ball
 initBall =
     { x = 250
     , y = 250
-    , radius = 10
+    , size = 10
     , horizSpeed = 4
     , vertSpeed = 2
     }
@@ -321,7 +321,7 @@ maybeBounceDistanceFromCenter paddle ball =
     case paddle of
         LeftPaddle { x, y, width, height } ->
             if
-                (ball.x - ball.radius <= x + width)
+                (ball.x <= x + width)
                     && (ball.y >= y)
                     && (ball.y <= y + height)
                     && (ball.horizSpeed < 0)
@@ -333,7 +333,7 @@ maybeBounceDistanceFromCenter paddle ball =
 
         RightPaddle { x, y, height } ->
             if
-                (ball.x + ball.radius >= x)
+                (ball.x + ball.size >= x)
                     && (ball.y >= y)
                     && (ball.y <= y + height)
                     && (ball.horizSpeed > 0)
@@ -347,18 +347,18 @@ maybeBounceDistanceFromCenter paddle ball =
 shouldBallBounceVertically : Ball -> Bool
 shouldBallBounceVertically ball =
     let
-        radius =
-            ball.radius
+        size =
+            ball.size
     in
-    ball.y <= radius || ball.y >= (500 - radius)
+    ball.y <= size || ball.y >= (500 - size)
 
 
 maybeWinner : Ball -> Maybe Player
 maybeWinner ball =
-    if ball.x <= ball.radius then
+    if ball.x <= ball.size then
         Just RightPlayer
 
-    else if ball.x >= (500 - ball.radius) then
+    else if ball.x >= (500 - ball.size) then
         Just LeftPlayer
 
     else
@@ -391,11 +391,12 @@ view { ball, rightPaddle, leftPaddle, score } =
 
 
 viewBall : Ball -> Svg.Svg Msg
-viewBall { x, y, radius } =
-    circle
-        [ cx <| String.fromInt x
-        , cy <| String.fromInt y
-        , r <| String.fromInt radius
+viewBall ball =
+    rect
+        [ x <| String.fromInt ball.x
+        , y <| String.fromInt ball.y
+        , width <| String.fromInt ball.size
+        , height <| String.fromInt ball.size
         ]
         []
 
