@@ -133,48 +133,8 @@ update msg model =
     case msg of
         OnAnimationFrame timeDelta ->
             let
-                ball =
-                    model.ball
-
-                shouldBounce =
-                    shouldBallBounce model.rightPaddle model.ball
-                        || shouldBallBounce model.leftPaddle model.ball
-
-                horizSpeed =
-                    if shouldBounce then
-                        ball.horizSpeed * -1
-
-                    else
-                        ball.horizSpeed
-
-                shouldBounceVertically =
-                    shouldBallBounceVertically model.ball
-
-                vertSpeed =
-                    if shouldBounceVertically then
-                        ball.vertSpeed * -1
-
-                    else
-                        ball.vertSpeed
-
                 updatedBall =
-                    case model.gameStatus of
-                        Winner _ ->
-                            ball
-
-                        NoWinner ->
-                            { ball
-                                | x = ball.x + horizSpeed
-                                , y = ball.y + vertSpeed
-                                , horizSpeed = horizSpeed
-                                , vertSpeed = vertSpeed
-                            }
-
-                updatedRightPaddle =
-                    updatePaddle model.rightPaddleMovement model.rightPaddle
-
-                updatedLeftPaddle =
-                    updatePaddle model.leftPaddleMovement model.leftPaddle
+                    updateBall model
 
                 ( gameStatus, score, cmd ) =
                     case ( maybeWinner updatedBall, model.gameStatus ) of
@@ -198,8 +158,8 @@ update msg model =
             in
             ( { model
                 | ball = updatedBall
-                , rightPaddle = updatedRightPaddle
-                , leftPaddle = updatedLeftPaddle
+                , rightPaddle = updatePaddle model.rightPaddleMovement model.rightPaddle
+                , leftPaddle = updatePaddle model.leftPaddleMovement model.leftPaddle
                 , gameStatus = gameStatus
                 , score = score
               }
@@ -257,6 +217,50 @@ update msg model =
               }
             , Cmd.none
             )
+
+
+updateBall :
+    { a
+        | gameStatus : GameStatus
+        , ball : Ball
+        , rightPaddle : Paddle
+        , leftPaddle : Paddle
+    }
+    -> Ball
+updateBall { gameStatus, ball, rightPaddle, leftPaddle } =
+    let
+        shouldBounce =
+            shouldBallBounce rightPaddle ball
+                || shouldBallBounce leftPaddle ball
+
+        horizSpeed =
+            if shouldBounce then
+                ball.horizSpeed * -1
+
+            else
+                ball.horizSpeed
+
+        shouldBounceVertically =
+            shouldBallBounceVertically ball
+
+        vertSpeed =
+            if shouldBounceVertically then
+                ball.vertSpeed * -1
+
+            else
+                ball.vertSpeed
+    in
+    case gameStatus of
+        Winner _ ->
+            ball
+
+        NoWinner ->
+            { ball
+                | x = ball.x + horizSpeed
+                , y = ball.y + vertSpeed
+                , horizSpeed = horizSpeed
+                , vertSpeed = vertSpeed
+            }
 
 
 updatePaddle : PaddleMovement -> Paddle -> Paddle
