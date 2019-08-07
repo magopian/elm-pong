@@ -248,6 +248,10 @@ update msg model =
         SleepDone ->
             ( { model
                 | ball = initBall
+                , rightPaddle = RightPaddle <| initPaddle 480
+                , leftPaddle = LeftPaddle <| initPaddle 10
+                , rightPaddleMovement = NotMoving
+                , leftPaddleMovement = NotMoving
                 , gameStatus = NoWinner
               }
             , Cmd.none
