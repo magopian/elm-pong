@@ -63,6 +63,7 @@ type Msg
     | KeyDown PlayerAction
     | KeyUp PlayerAction
     | SleepDone
+    | NewWinner Player
 
 
 type PlayerAction
@@ -136,34 +137,32 @@ update msg model =
                 updatedBall =
                     updateBall model
 
-                ( gameStatus, score, cmd ) =
-                    case ( maybeWinner updatedBall, model.gameStatus ) of
-                        ( Just player, NoWinner ) ->
-                            let
-                                alwaysSleepDone : a -> Msg
-                                alwaysSleepDone =
-                                    always SleepDone
-
-                                delayCmd =
-                                    Process.sleep 500
-                                        |> Task.perform alwaysSleepDone
-
-                                updatedScore =
-                                    updateScores model.score player
-                            in
-                            ( Winner player, updatedScore, delayCmd )
-
-                        _ ->
-                            ( model.gameStatus, model.score, Cmd.none )
+                updatedModel =
+                    { model
+                        | ball = updatedBall
+                        , rightPaddle = updatePaddle model.rightPaddleMovement model.rightPaddle
+                        , leftPaddle = updatePaddle model.leftPaddleMovement model.leftPaddle
+                    }
             in
-            ( { model
-                | ball = updatedBall
-                , rightPaddle = updatePaddle model.rightPaddleMovement model.rightPaddle
-                , leftPaddle = updatePaddle model.leftPaddleMovement model.leftPaddle
-                , gameStatus = gameStatus
-                , score = score
-              }
-            , cmd
+            case ( maybeWinner updatedBall, model.gameStatus ) of
+                ( Just player, NoWinner ) ->
+                    update (NewWinner player) updatedModel
+
+                _ ->
+                    ( updatedModel, Cmd.none )
+
+        NewWinner player ->
+            let
+                alwaysSleepDone : a -> Msg
+                alwaysSleepDone =
+                    always SleepDone
+
+                updatedScore =
+                    updateScores model.score player
+            in
+            ( { model | gameStatus = Winner player, score = updatedScore }
+            , Process.sleep 500
+                |> Task.perform alwaysSleepDone
             )
 
         KeyDown playerAction ->
