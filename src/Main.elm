@@ -4,6 +4,7 @@ import Browser
 import Browser.Events
 import Json.Decode as Decode
 import Process
+import Random
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
 import Task
@@ -64,6 +65,7 @@ type Msg
     | KeyUp PlayerAction
     | RestartGame
     | NewWinner Player
+    | NewDirection Int
 
 
 type PlayerAction
@@ -159,11 +161,24 @@ update msg model =
 
                 updatedScore =
                     updateScores model.score player
+
+                sleepCmd =
+                    Process.sleep 500
+                        |> Task.perform alwaysRestartGame
             in
             ( { model | gameStatus = Winner player, score = updatedScore }
-            , Process.sleep 500
-                |> Task.perform alwaysRestartGame
+            , Cmd.batch
+                [ sleepCmd
+                , Random.generate NewDirection (Random.int 0 100)
+                ]
             )
+
+        NewDirection direction ->
+            let
+                _ =
+                    Debug.log "New random direction" direction
+            in
+            ( model, Cmd.none )
 
         KeyDown playerAction ->
             case playerAction of
