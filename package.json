@@ -4,10 +4,10 @@
   "description": "A tutorial on how to make a pong game in elm. Follow-along blog post: http://mathieu.agopian.info/blog/making-a-pong-game-in-elm.html",
   "main": "index.js",
   "scripts": {
-    "build": "elm make src/Main.elm --optimize",
-    "deploy": "npm run build && gh-pages --dist ./ --src index.html",
-    "debug": "elm-live src/Main.elm -- --debug",
-    "live": "elm-live src/Main.elm"
+    "build": "elm make src/Main.elm --optimize --output=app.js",
+    "deploy": "npm run build && gh-pages --dist ./",
+    "debug": "elm-live src/Main.elm -- --debug --output=app.js",
+    "live": "elm-live src/Main.elm -- --output=app.js"
   },
   "repository": {
     "type": "git",
