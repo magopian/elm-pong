@@ -82,11 +82,11 @@ type alias Score =
 
 
 type alias Flags =
-    ()
+    Int
 
 
 init : Flags -> ( Model, Cmd Msg )
-init _ =
+init seed =
     ( { ball = initBall
       , rightPaddle = RightPaddle <| initPaddle 480
       , leftPaddle = LeftPaddle <| initPaddle 10
@@ -97,7 +97,7 @@ init _ =
             { rightPlayerScore = 0
             , leftPlayerScore = 0
             }
-      , seed = Random.initialSeed 42
+      , seed = Random.initialSeed seed
       }
     , Cmd.none
     )
