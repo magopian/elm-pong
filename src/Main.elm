@@ -82,7 +82,7 @@ type alias Score =
 
 
 type alias Flags =
-    Int
+    Float
 
 
 init : Flags -> ( Model, Cmd Msg )
@@ -97,7 +97,12 @@ init seed =
             { rightPlayerScore = 0
             , leftPlayerScore = 0
             }
-      , seed = Random.initialSeed seed
+      , seed =
+            -- A number between 0 and 100
+            seed
+                |> (*) 100
+                |> round
+                |> Random.initialSeed
       }
     , Cmd.none
     )
