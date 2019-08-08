@@ -18,6 +18,7 @@ type alias Model =
     , leftPaddleMovement : PaddleMovement
     , gameStatus : GameStatus
     , score : Score
+    , seed : Random.Seed
     }
 
 
@@ -96,6 +97,7 @@ init _ =
             { rightPlayerScore = 0
             , leftPlayerScore = 0
             }
+      , seed = Random.initialSeed 42
       }
     , Cmd.none
     )
@@ -165,12 +167,16 @@ update msg model =
                     Process.sleep 500
                         |> Task.perform alwaysRestartGame
 
-                ( randomDirection, _ ) =
-                    Random.initialSeed 42
+                ( randomDirection, newSeed ) =
+                    model.seed
                         |> Random.step (Random.int 0 100)
                         |> Debug.log "Random direction: "
             in
-            ( { model | gameStatus = Winner player, score = updatedScore }
+            ( { model
+                | gameStatus = Winner player
+                , score = updatedScore
+                , seed = newSeed
+              }
             , sleepCmd
             )
 
