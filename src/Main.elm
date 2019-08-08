@@ -65,7 +65,6 @@ type Msg
     | KeyUp PlayerAction
     | RestartGame
     | NewWinner Player
-    | NewDirection Int
 
 
 type PlayerAction
@@ -165,20 +164,15 @@ update msg model =
                 sleepCmd =
                     Process.sleep 500
                         |> Task.perform alwaysRestartGame
+
+                ( randomDirection, _ ) =
+                    Random.initialSeed 42
+                        |> Random.step (Random.int 0 100)
+                        |> Debug.log "Random direction: "
             in
             ( { model | gameStatus = Winner player, score = updatedScore }
-            , Cmd.batch
-                [ sleepCmd
-                , Random.generate NewDirection (Random.int 0 100)
-                ]
+            , sleepCmd
             )
-
-        NewDirection direction ->
-            let
-                _ =
-                    Debug.log "New random direction" direction
-            in
-            ( model, Cmd.none )
 
         KeyDown playerAction ->
             case playerAction of
