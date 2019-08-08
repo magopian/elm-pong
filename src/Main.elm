@@ -242,8 +242,24 @@ update msg model =
                 ( vertSpeed, newSeed ) =
                     randomVertSpeed model.seed
 
+                horizSpeedDirection =
+                    -- This number is either 1 if the loser is the right
+                    -- player, or -1 if it's the left player who lost last.
+                    case model.gameStatus of
+                        Winner RightPlayer ->
+                            -1
+
+                        _ ->
+                            -- Here we are returning 1 if it's the LeftPlayer,
+                            -- and at the same time dealing with the `NoWinner`
+                            -- case which shouldn't happen.
+                            1
+
                 ball =
-                    { initBall | vertSpeed = vertSpeed }
+                    { initBall
+                        | vertSpeed = vertSpeed
+                        , horizSpeed = initBall.horizSpeed * horizSpeedDirection
+                    }
             in
             ( { model
                 | ball = ball
