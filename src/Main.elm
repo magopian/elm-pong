@@ -185,16 +185,10 @@ update msg model =
                 sleepCmd =
                     Process.sleep 500
                         |> Task.perform alwaysRestartGame
-
-                ( randomDirection, newSeed ) =
-                    model.seed
-                        |> Random.step (Random.int 0 100)
-                        |> Debug.log "Random direction: "
             in
             ( { model
                 | gameStatus = Winner player
                 , score = updatedScore
-                , seed = newSeed
               }
             , sleepCmd
             )
@@ -244,9 +238,17 @@ update msg model =
                     )
 
         RestartGame ->
+            let
+                ( vertSpeed, newSeed ) =
+                    randomVertSpeed model.seed
+
+                ball =
+                    { initBall | vertSpeed = vertSpeed }
+            in
             ( { model
-                | ball = initBall
+                | ball = ball
                 , gameStatus = NoWinner
+                , seed = newSeed
               }
             , Cmd.none
             )
