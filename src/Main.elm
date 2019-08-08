@@ -85,9 +85,28 @@ type alias Flags =
     Float
 
 
+randomVertSpeed : Random.Seed -> ( Int, Random.Seed )
+randomVertSpeed seed =
+    Random.step (Random.int -10 10) seed
+
+
 init : Flags -> ( Model, Cmd Msg )
 init seed =
-    ( { ball = initBall
+    let
+        initialSeed =
+            -- A number between 0 and 100
+            seed
+                |> (*) 100
+                |> round
+                |> Random.initialSeed
+
+        ( initialVertSpeed, newSeed ) =
+            randomVertSpeed initialSeed
+
+        initialBall =
+            { initBall | vertSpeed = initialVertSpeed }
+    in
+    ( { ball = initialBall
       , rightPaddle = RightPaddle <| initPaddle 480
       , leftPaddle = LeftPaddle <| initPaddle 10
       , rightPaddleMovement = NotMoving
@@ -97,12 +116,7 @@ init seed =
             { rightPlayerScore = 0
             , leftPlayerScore = 0
             }
-      , seed =
-            -- A number between 0 and 100
-            seed
-                |> (*) 100
-                |> round
-                |> Random.initialSeed
+      , seed = newSeed
       }
     , Cmd.none
     )
