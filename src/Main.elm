@@ -94,7 +94,7 @@ init : Flags -> ( Model, Cmd Msg )
 init seed =
     let
         initialSeed =
-            -- A number between -100 and 100
+            -- A number between 0 and 100
             seed
                 |> (*) 100
                 |> round
